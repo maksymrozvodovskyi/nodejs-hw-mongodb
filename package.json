@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/maksymrozvodovskyi/nodejs-hw-mongodb#readme",
   "description": "",
+  "type": "module",
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "pino-pretty": "^13.0.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
