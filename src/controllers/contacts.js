@@ -73,3 +73,18 @@ export const upsertContactController = async (req, res) => {
     data: result.contact,
   });
 };
+
+export const patchContactController = async (req, res) => {
+  const result = await updateContact(contactId, req.body);
+
+  if (!result) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
+
+  res.json({
+    status: 200,
+    message: `Successfully patched a student!`,
+    data: result.student,
+  });
+};
