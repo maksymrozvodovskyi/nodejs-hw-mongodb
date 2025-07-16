@@ -11,8 +11,8 @@ export const getContactById = async (contactId) => {
 };
 
 export const createContact = async (payload) => {
-  const contact = ContactsCollection.create(payload);
-  return;
+  const contact = await ContactsCollection.create(payload);
+  return contact;
 };
 
 export const deleteContact = async (contactId) => {
@@ -37,7 +37,7 @@ export const updateContact = async (contactId, payload, options = {}) => {
   if (!result || !result.value) return null;
 
   return {
-    student: result.value,
+    contact: result.value,
     isNew: Boolean(rawResult?.lastErrorObject?.upserted),
   };
 };
