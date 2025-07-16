@@ -38,6 +38,6 @@ export const updateContact = async (contactId, payload, options = {}) => {
 
   return {
     contact: result.value,
-    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+    isNew: Boolean(result?.lastErrorObject?.upserted),
   };
 };
