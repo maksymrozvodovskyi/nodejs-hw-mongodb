@@ -1,3 +1,5 @@
+import Joi from 'joi';
+
 export const createStudentSchema = Joi.object({
   name: Joi.string().min(3).max(20).required().messages({
     'string.base': 'Username should be a string',
@@ -12,11 +14,18 @@ export const createStudentSchema = Joi.object({
     'number.max': 'Age should be at most {#limit}',
     'any.required': 'Age is required',
   }),
-  gender: Joi.string().valid('male', 'female', 'other').required().messages({
-    'string.base': 'Gender must be a string',
-    'any.only': 'Gender must be one of [male, female, other]',
-    'any.required': 'Gender is required',
-  }),
+  gender: Joi.string()
+    .min(3)
+    .max(20)
+    .valid('male', 'female', 'other')
+    .required()
+    .messages({
+      'string.base': 'Gender must be a string',
+      'string.min': 'Gender must be at least {#limit}',
+      'string.max': 'Gender must be at most {#limit}',
+      'any.only': 'Gender must be one of [male, female, other]',
+      'any.required': 'Gender is required',
+    }),
   avgMark: Joi.number().min(2).max(12).required().messages({
     'number.base': 'Average mark must be a number',
     'number.min': 'Average mark must be at least {#limit}',
@@ -42,11 +51,17 @@ export const updateStudentSchema = Joi.object({
     'number.max': 'Age should be at most {#limit}',
     'any.required': 'Age is required',
   }),
-  gender: Joi.string().valid('male', 'female', 'other').messages({
-    'string.base': 'Gender must be a string',
-    'any.only': 'Gender must be one of [male, female, other]',
-    'any.required': 'Gender is required',
-  }),
+  gender: Joi.string()
+    .min(3)
+    .max(20)
+    .valid('male', 'female', 'other')
+    .messages({
+      'string.base': 'Gender must be a string',
+      'string.min': 'Gender must be at least {#limit}',
+      'string.max': 'Gender must be at most {#limit}',
+      'any.only': 'Gender must be one of [male, female, other]',
+      'any.required': 'Gender is required',
+    }),
   avgMark: Joi.number().min(2).max(12).messages({
     'number.base': 'Average mark must be a number',
     'number.min': 'Average mark must be at least {#limit}',
