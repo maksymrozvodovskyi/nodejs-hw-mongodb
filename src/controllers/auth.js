@@ -9,3 +9,7 @@ export const registerUserController = async (req, res) => {
     body: user,
   });
 };
+
+export const loginUserController = async (req, res) => {
+  await loginUser(req.body);
+};
