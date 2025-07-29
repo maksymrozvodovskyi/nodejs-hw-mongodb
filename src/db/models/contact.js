@@ -1,3 +1,4 @@
+import { required } from 'joi';
 import { Schema, model } from 'mongoose';
 
 const contactSchema = new Schema(
@@ -22,6 +23,11 @@ const contactSchema = new Schema(
       enum: ['work', 'home', 'personal'],
       required: true,
       default: 'personal',
+    },
+    userID: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'users',
     },
   },
   {
