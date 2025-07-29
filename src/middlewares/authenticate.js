@@ -9,7 +9,7 @@ export const authenticate = async (req, res, next) => {
     throw createHttpError(401, 'Please provide Authorization header');
   }
 
-  const [bearer, accessToken] = authorization.split('', 2);
+  const [bearer, accessToken] = authorization.split(' ', 2);
 
   if (bearer !== 'Bearer' || typeof accessToken !== 'string') {
     throw createHttpError(401, 'Auth header should be of type Bearer');
