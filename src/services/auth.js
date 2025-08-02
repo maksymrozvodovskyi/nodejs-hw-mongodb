@@ -4,6 +4,8 @@ import createHttpError from 'http-errors';
 import { UserCollection } from '../db/models/user.js';
 import { SessionsCollection } from '../db/models/session.js';
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
+import jwt from 'jsonwebtoken';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({
@@ -99,4 +101,15 @@ export const requestResetToken = async (email) => {
   if (user === null) {
     throw createHttpError(404, 'User not found');
   }
+
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    getEnvVar('JWT_SECRET'),
+    {
+      expiresIn: '15m',
+    },
+  );
 };
