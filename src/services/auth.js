@@ -122,3 +122,5 @@ export const requestResetToken = async (email) => {
     html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
   });
 };
+
+export const resetPassword = (token, password) => {};
