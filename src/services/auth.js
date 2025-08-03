@@ -123,4 +123,33 @@ export const requestResetToken = async (email) => {
   });
 };
 
-export const resetPassword = (token, password) => {};
+export const resetPassword = async (token, password) => {
+  try {
+    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      throw createHttpError(401, 'Token is expired or invalid.');
+    }
+    if ((error.name = 'JsonWebTokenError')) {
+      throw createHttpError(401, 'Token is unauthorized');
+    }
+
+    throw error;
+  }
+
+  const user = await UserCollection.findOne({
+    email: decoded.email,
+    _id: decoded.sub,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+  await UserCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+};
