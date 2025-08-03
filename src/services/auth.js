@@ -6,6 +6,7 @@ import { SessionsCollection } from '../db/models/session.js';
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import jwt from 'jsonwebtoken';
 import { getEnvVar } from '../utils/getEnvVar.js';
+import { sendEmail } from '../utils/sendMail.js';
 
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({
@@ -109,7 +110,14 @@ export const requestResetToken = async (email) => {
     },
     getEnvVar('JWT_SECRET'),
     {
-      expiresIn: '15m',
+      expiresIn: '5m',
     },
   );
+
+  await sendEmail({
+    from: getEnvVar(),
+    to: email,
+    subject: 'Reset password',
+    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+  });
 };
