@@ -4,6 +4,7 @@ import {
   registerUser,
   refreshUserSession,
   loginUser,
+  requestResetToken,
 } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {

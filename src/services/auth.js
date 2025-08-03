@@ -7,6 +7,7 @@ import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import jwt from 'jsonwebtoken';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendMail.js';
+import { SMTP } from '../constants/index.js';
 
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({
@@ -115,7 +116,7 @@ export const requestResetToken = async (email) => {
   );
 
   await sendEmail({
-    from: getEnvVar(),
+    from: getEnvVar(SMTP.SMTP_FROM),
     to: email,
     subject: 'Reset password',
     html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
