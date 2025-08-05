@@ -119,18 +119,21 @@ export const requestResetToken = async (email) => {
     from: getEnvVar(SMTP.SMTP_FROM),
     to: email,
     subject: 'Reset password',
-    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+    html: `<p>Click <a href="${getEnvVar(
+      'APP_DOMAIN',
+    )}/reset-password?token=${resetToken}">here</a> to reset your password!</p>`,
   });
 };
 
 export const resetPassword = async (token, password) => {
+  let decoded;
   try {
-    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+    decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       throw createHttpError(401, 'Token is expired or invalid.');
     }
-    if ((error.name = 'JsonWebTokenError')) {
+    if (error.name === 'JsonWebTokenError') {
       throw createHttpError(401, 'Token is unauthorized');
     }
 
@@ -146,10 +149,12 @@ export const resetPassword = async (token, password) => {
     throw createHttpError(404, 'User not found');
   }
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+  const encryptedPassword = await bcrypt.hash(password, 10);
 
   await UserCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
   );
+
+  await SessionsCollection.deleteMany({ userId: user._id });
 };
