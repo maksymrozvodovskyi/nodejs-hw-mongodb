@@ -32,3 +32,4 @@ responses:
               type: string
               example: Successfully get contact
             data:
+              $ref: ../../../components/schemas/contact.yaml
