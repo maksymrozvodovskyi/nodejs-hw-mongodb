@@ -7,6 +7,13 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import cookieParser from 'cookie-parser';
 import { UPLOAD_DIR } from './constants/index.js';
+import swaggerUi from 'swagger-ui-express';
+import * as fs from 'node:fs';
+import path from 'node:path';
+
+const SWAGGER_DOCUMENT = JSON.parse(
+  fs.readFileSync(path.join('docs', 'swagger.json')),
+);
 
 const PORT = Number(getEnvVar('PORT', 3000));
 
@@ -17,6 +24,7 @@ export const startServer = () => {
   app.use(cors());
   app.use(cookieParser());
   app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(SWAGGER_DOCUMENT));
 
   app.use(
     pino({
