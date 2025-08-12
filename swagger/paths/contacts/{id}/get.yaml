@@ -5,7 +5,6 @@ operationId: getContact
 description: Get contact by id
 security:
   - bearerAuth: []
-
 parameters:
   - in: path
     name: id
