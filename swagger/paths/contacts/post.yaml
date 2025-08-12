@@ -54,10 +54,14 @@ responses:
               type: integer
               example: 201
             message:
-              type: string
+              type: array
+              items:
+                type: string
               example: Contact created successfully
             data:
               $ref: ../../components/schemas/contact.yaml
+  '400':
+    $ref: ../../components/responses/400.yaml
   '401':
     $ref: ../../components/responses/401.yaml
   '500':
