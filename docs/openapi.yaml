@@ -14,12 +14,14 @@ tags:
     description: Auth operations.
 servers:
   - url: http://127.0.0.1:3000
-  - url: #посилання на задеплоєний сайт
+  # - url: #посилання на задеплоєний сайт
 paths:
   /contacts/{id}:
     get:
       $ref: '../swagger/paths/contacts/{id}/get.yaml'
-  # тут будуть посилання на ендпоінти
+  /contacts:
+    post:
+      $ref: '../swagger/paths/contacts/post.yaml'
 components:
   securitySchemes:
     bearerAuth:

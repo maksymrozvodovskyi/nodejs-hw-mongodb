@@ -5,6 +5,7 @@ required:
   - phoneNumber
   - contactType
   - userId
+  - photo
   - createdAt
   - updatedAt
 properties:
@@ -18,7 +19,7 @@ properties:
     example: John Deere
   phoneNumber:
     type: string
-    description: Contact phoneNumber
+    description: Contact phone number
     example: +380961711291
   email:
     type: string
