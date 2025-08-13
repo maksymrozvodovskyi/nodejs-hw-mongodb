@@ -1,0 +1,84 @@
+tags:
+  - Contacts
+summary: Partially updates contact data by the specified ID
+operationId: patchContact
+description: Partially updates contact data by the specified ID
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 689a4c53a949749869605279
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Contact name
+            example: John Deere
+          phoneNumber:
+            type: string
+            description: Contact phone number
+            example: +380961711291
+          email:
+            type: string
+            description: Contact email
+            example: user@mail.com
+          contactType:
+            type: string
+            description: Type of contact
+            enum: ['work', 'home', 'personal']
+            default: 'personal'
+          photo:
+            type: string
+            format: binary
+            description: Contact photo
+responses:
+  '200':
+    description: Patched a contact
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully patched a contact!
+            data:
+              $ref: ../../../components/schemas/contact.yaml
+  '404':
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: NotFoundError
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Contact not found
