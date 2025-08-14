@@ -25,11 +25,11 @@ requestBody:
           password:
             description: User's password
             type: string
-            example: 'qwezxcqweasdzxc22"
-responses: 
-  "201":
-     description: Successfully registered a user
-     content: 
+            example: qwezxcqweasdzxc22
+responses:
+  '201':
+    description: Successfully registered a user
+    content:
       application/json:
         schema:
           type: object
@@ -41,13 +41,13 @@ responses:
             status:
               type: integer
               example: 201
-            message: 
+            message:
               type: string
               example: Successfully registered a user
-            data: 
+            data:
               type: object
               $ref: ../../components/schemas/user.yaml
-  "401":
+  '401':
     $ref: ../../components/responses/401.yaml
-  "409": 
+  '409':
     $ref: ../../components/responses/409.yaml
