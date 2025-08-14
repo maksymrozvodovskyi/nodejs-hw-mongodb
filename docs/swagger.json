@@ -12,6 +12,9 @@
   "servers": [
     {
       "url": "http://127.0.0.1:3000"
+    },
+    {
+      "url": "https://contacts-app-vqqf.onrender.com"
     }
   ],
   "tags": [
@@ -164,7 +167,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/formdata": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -182,6 +185,12 @@
                     "type": "string",
                     "description": "Contact email",
                     "example": "user@mail.com"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "description": "Contact is marked as favourite (true — added to favourites, false — not)",
+                    "example": true,
+                    "default": false
                   },
                   "contactType": {
                     "type": "string",
@@ -408,6 +417,7 @@
                   "phoneNumber",
                   "email",
                   "contactType",
+                  "isFavourite",
                   "photo"
                 ],
                 "properties": {
@@ -435,6 +445,12 @@
                       "personal"
                     ],
                     "default": "personal"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "description": "Contact is marked as favourite (true — added to favourites, false — not)",
+                    "example": true,
+                    "default": false
                   },
                   "photo": {
                     "type": "string",
@@ -486,6 +502,378 @@
           },
           "500": {
             "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register user",
+        "operationId": "registerUser",
+        "description": "Register user with payload",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "example@mail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "qwezxcqweasdzxc22"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user with email and password",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "example@mail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "qweqwezxcqwe22"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accesToken"
+                      ],
+                      "properties": {
+                        "accesToken": {
+                          "type": "string",
+                          "example": "Wad3SGuuobrYmM6o5iQtKLlxUgKIO/KZK4fdm5w-"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh user's session",
+        "operationId": "refreshUser",
+        "description": "Refresh user's session",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Session refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Session refreshed successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accesToken"
+                      ],
+                      "properties": {
+                        "accesToken": {
+                          "type": "string",
+                          "example": "Wad3SGuuobrYmM6o5iQtKLlxUgKIO/KZK4fdm5w-"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logout user",
+        "security": [],
+        "responses": {
+          "204": {
+            "description": "Successfully logged out"
+          }
+        }
+      }
+    },
+    "/auth/send-reset-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send reset password link",
+        "operationId": "resetSendEmail",
+        "description": "Send reset password link",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "example": "user@mail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reset password email has been successfully sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reset password email has been successfully sent"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/auth/reset-pwd": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset password",
+        "operationId": "resetPassword",
+        "description": "Reset user password",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "password"
+                ],
+                "properties": {
+                  "token": {
+                    "description": "Token received via email",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODg4Y2MzOTBiOGM2ZTVjZTNjOWY4MWEiLCJlbWFpbCI6InNlcmdleXQyMDAwQGdtYWlsLmNvbSIsImlhdCI6MTc1NDA2ODI0NCwiZXhwIjoxNzU0MDY4NTQ0fQ.4mX1VKQ9VOTGIvRf_-AAt6Nixgub3J1JRaGoN3FmfIQ"
+                  },
+                  "password": {
+                    "description": "New password",
+                    "type": "string",
+                    "example": "zxcqweasdzxcqwwe22"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password has been successfully reset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password has been successfully reset"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       }
@@ -567,6 +955,48 @@
             "type": "string",
             "format": "date-time",
             "example": "2024-05-08T16:27:14.954168"
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "_id": {
+            "description": "User's id",
+            "type": "string",
+            "example": "68821300b52a441f8f67fc0f"
+          },
+          "name": {
+            "description": "User's name",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "description": "User's email",
+            "type": "string",
+            "example": "example@mail.com"
+          },
+          "password": {
+            "description": "User's password",
+            "type": "string",
+            "example": "qwezxcqweasdzxc22"
+          },
+          "createdAt": {
+            "description": "Contact's creation date",
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-07-23T09:32:14.378+00:00"
+          },
+          "updatedAt": {
+            "description": "Contact's last update date",
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-07-23T09:32:14.378+00:00"
           }
         }
       }
@@ -653,6 +1083,43 @@
                     "message": {
                       "type": "string",
                       "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Email in use error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email in use error"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email in use"
                     }
                   }
                 }

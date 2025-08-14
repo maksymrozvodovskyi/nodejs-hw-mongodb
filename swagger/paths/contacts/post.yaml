@@ -15,8 +15,6 @@ requestBody:
           - phoneNumber
           - email
           - contactType
-          - isFavourite
-          - photo
         properties:
           name:
             type: string
