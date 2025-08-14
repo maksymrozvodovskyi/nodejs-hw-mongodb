@@ -416,9 +416,7 @@
                   "name",
                   "phoneNumber",
                   "email",
-                  "contactType",
-                  "isFavourite",
-                  "photo"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -445,17 +443,6 @@
                       "personal"
                     ],
                     "default": "personal"
-                  },
-                  "isFavourite": {
-                    "type": "boolean",
-                    "description": "Contact is marked as favourite (true — added to favourites, false — not)",
-                    "example": true,
-                    "default": false
-                  },
-                  "photo": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "Contact photo"
                   }
                 }
               }
