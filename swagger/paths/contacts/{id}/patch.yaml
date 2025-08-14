@@ -14,7 +14,7 @@ parameters:
       example: 689a4c53a949749869605279
 requestBody:
   content:
-    application/json:
+    multipart/formdata:
       schema:
         type: object
         properties:
@@ -30,6 +30,11 @@ requestBody:
             type: string
             description: Contact email
             example: user@mail.com
+          isFavourite:
+            type: boolean
+            description: Contact is marked as favourite (true — added to favourites, false — not)
+            example: true
+            default: false
           contactType:
             type: string
             description: Type of contact
